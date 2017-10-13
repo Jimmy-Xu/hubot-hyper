@@ -1,6 +1,6 @@
 {
   "name": "hubot-hyper-devops",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Hubot script for hyper.sh devops",
   "main": "index.coffee",
   "scripts": {
