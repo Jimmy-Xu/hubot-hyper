@@ -28,14 +28,18 @@ module.exports = (robot) ->
       title = "From #{robot.adapterName}"
 
     server = process.env.HUBOT_GNTP_SERVER
-    if server? and (server.split ":").length is 1
-      server = server + ":" + defaultPort
+    if server? and server isnt ""
+      if (server.split ":").length is 1
+        server = server + ":" + defaultPort
+      else if (server.split ":").length > 2
+        console.log "'#{server}' is invalid server, skip execute gntp-send"
+        return
     else
-      console.log "'#{server}' is invalid server, skip execute gntp-send"
+      console.log "no gntp server specified, skip execute gntp-send"
       return
 
     # prepare args
-    args = ["-s", server, "-p", process.env.HUBOT_GNTP_PASSWORD, "-a", appName , title, message]
+    args = ["-s", server, "-p", process.env.HUBOT_GNTP_PASSWORD, "-a", appName, title, message]
     console.debug "[run_gntp_cmd] spawn: gntp-send ", args
     # exec gntp-send
     spawn = require("child_process").spawn
@@ -86,8 +90,10 @@ module.exports = (robot) ->
     if robot.adapterName is "slack"
       room = robot.adapter.client.rtm.dataStore.getChannelGroupOrDMById data.message.user.room
       roomName = room.name
+      console.log "[Heard from Slack] room:[\##{roomName}], sender:[#{senderName}], message:[#{text}]"
     else
       roomName = data.message.user.room
-    console.log "[Heard from #{robot.adapterName}] room:[\##{roomName}], sender:[#{senderName}], message:[#{text}]"
+      console.log "[Heard from #{robot.adapterName}] room:[#{roomName}], sender:[#{senderName}], message:[#{text}]"
+
     run_gntp_cmd roomName, senderName, text, (text) ->
       console.log "gntp result:", text
