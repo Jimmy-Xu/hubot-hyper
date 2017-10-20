@@ -8,7 +8,7 @@ Hubot script for hyper.sh devops
 - hubot 2.19.0
 - coffee-script@^1.12.6
 - hyper client ([install](https://docs.hyper.sh/GettingStarted/install.html))
-- gntp-send ([source](https://github.com/mattn/gntp-send.git))
+
 
 # Installation
 
